@@ -87,7 +87,7 @@ public class Main {
 		res.status(200);
 		JSONObject obj = new JSONObject();
 		greetings.put(++count, message);
-		obj.put("message", "Message created.");
+		obj.put(count, message);
 		return obj.toJSONString();
 	}
 
