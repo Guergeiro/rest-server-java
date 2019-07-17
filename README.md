@@ -5,7 +5,7 @@ The API will follow all the correct guidelines that currently exist for a RESTfu
 - URLs include nouns, not verbs.
 - Use of plural nouns for consistency.
 - Use HTTP verbs (GET, POST, PUT, DELETE) according with [HTTP/1.1](http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html) standard.
-- Use of version in the URL, example http(s)://api.brenosalles.com/v1/path/to/resource.
+- Use of version in the URL, example http(s)://localhost:port/path/to/resource.
 ## HTTP Verbs
 Bellow is an example that shows how the API will behave and the vebs that it will use.
 
