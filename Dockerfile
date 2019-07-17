@@ -1,8 +1,4 @@
-FROM openjdk:11
-
-# Install maven
-RUN apt-get update
-RUN apt-get install -y maven
+FROM maven:3.6.1-jdk-11
 
 COPY . /usr/src/
 WORKDIR /usr/src/rest-api

@@ -1,5 +1,6 @@
 package main;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -7,11 +8,12 @@ import static spark.Spark.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import messages.Message;
 import spark.Response;
 
 public class Main {
 	// Attributes
-	private static HashMap<Integer, String> greetings = new HashMap<>();
+	private static HashMap<Integer, Message> greetings = new HashMap<>();
 	private static Integer count = 0;
 
 	public static void main(String[] args) {
@@ -24,7 +26,7 @@ public class Main {
 		});
 
 		put("/greetings/:id", (req, res) -> {
-			return updateGreeting(res, Integer.valueOf(req.params(":id")), req.queryParams("message"));
+			return updateGreeting(res, Integer.valueOf(req.params(":id")), new Message(req.queryParams("message"), new Timestamp(System.currentTimeMillis())));
 		});
 
 		delete("/greetings/:id", (req, res) -> {
@@ -32,7 +34,7 @@ public class Main {
 		});
 
 		post("/greetings", (req, res) -> {
-			return createGreeting(res, req.queryParams("message"));
+			return createGreeting(res, new Message(req.queryParams("message"), new Timestamp(System.currentTimeMillis())));
 		});
 
 	}
@@ -42,9 +44,9 @@ public class Main {
 		res.type("application/json");
 		res.status(200);
 		JSONArray array = new JSONArray();
-		for (Entry<Integer, String> entry : greetings.entrySet()) {
+		for (Entry<Integer, Message> entry : greetings.entrySet()) {
 			JSONObject obj = new JSONObject();
-			obj.put(entry.getKey(), entry.getValue());
+			obj.put(entry.getKey(), entry.getValue().toJSON());
 			array.add(obj);
 		}
 		return array.toJSONString();
@@ -54,9 +56,9 @@ public class Main {
 	private static String oneGreeting(Response res, Integer id) {
 		res.type("application/json");
 		JSONObject obj = new JSONObject();
-		String message = greetings.get(id);
+		Message message = greetings.get(id);
 		if (message != null) {
-			obj.put(id, message);
+			obj.put(id, message.toJSON());
 			res.status(200);
 		} else {
 			obj.put("message", "Key doesn't exist.");
@@ -66,13 +68,13 @@ public class Main {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static String updateGreeting(Response res, Integer id, String message) {
+	private static String updateGreeting(Response res, Integer id, Message message) {
 		res.type("application/json");
-		String value = greetings.get(id);
+		Message value = greetings.get(id);
 		JSONObject obj = new JSONObject();
 		if (value != null) {
 			greetings.put(id, message);
-			obj.put(id, message);
+			obj.put(id, message.toJSON());
 			res.status(200);
 		} else {
 			obj.put("message", "Key doesn't exist.");
@@ -82,12 +84,12 @@ public class Main {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static String createGreeting(Response res, String message) {
+	private static String createGreeting(Response res, Message message) {
 		res.type("application/json");
 		res.status(200);
 		JSONObject obj = new JSONObject();
 		greetings.put(++count, message);
-		obj.put(count, message);
+		obj.put(count, message.toJSON());
 		return obj.toJSONString();
 	}
 
@@ -95,7 +97,7 @@ public class Main {
 	private static String deleteGreeting(Response res, Integer id) {
 		res.type("application/json");
 		JSONObject obj = new JSONObject();
-		String message = greetings.get(id);
+		Message message = greetings.get(id);
 		if (message != null) {
 			obj.put("message", "Delete Successful.");
 			res.status(200);
