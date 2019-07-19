@@ -162,7 +162,7 @@ Bellow is an example that shows how the API will behave and the vebs that it wil
 - mvn clean install
 - mvn dependency:resolve
 - mvn verify
-- java -jar ./target/rest-api-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+- java -jar ./target/rest-api-0.1.0-SNAPSHOT-jar-with-dependencies.jar
 
 *Note: Will listen on port 4567*
 
