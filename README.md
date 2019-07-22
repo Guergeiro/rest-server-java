@@ -10,7 +10,7 @@ The API will follow all the correct guidelines that currently exist for a RESTfu
 Bellow is an example that shows how the API will behave and the vebs that it will use.
 
 | HTTP METHOD | GET | POST | PUT | DELETE |
-| --- | --- | --- | --- |
+| --- | --- | --- | --- | --- |
 | CRUD OP | READ | CREATE | UPDATE | REMOVE |
 | /dogs | List all dogs | Create new dog | Error | Error |
 | /dogs/1 | Info about dog 1 | Error | Update info of dog 1 | Remove dog 1 |
@@ -316,4 +316,4 @@ rmi-port=INSERT PORT HERE
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Author
-[Breno Salles](brenosalles.com)
+[Breno Salles](https://brenosalles.com)
