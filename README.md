@@ -1,4 +1,4 @@
-# rest-api-java-maven-docker
+# rest-server-java
 ## RESTful API
 The API will follow all the correct guidelines that currently exist for a RESTful API. Here are some of them:
 - A URL identifies a resource.
@@ -9,11 +9,11 @@ The API will follow all the correct guidelines that currently exist for a RESTfu
 ## HTTP Verbs
 Bellow is an example that shows how the API will behave and the vebs that it will use.
 
-| HTTP METHOD | GET | POST | DELETE |
+| HTTP METHOD | GET | POST | PUT | DELETE |
 | --- | --- | --- | --- |
-| CRUD OP | READ | CREATE/UPDATE | REMOVE |
-| /dogs | List all dogs | Create new dog | Error |
-| /dogs/1 | Info about dog 1 | Update info of dog 1 | Remove dog 1 |
+| CRUD OP | READ | CREATE | UPDATE | REMOVE |
+| /dogs | List all dogs | Create new dog | Error | Error |
+| /dogs/1 | Info about dog 1 | Error | Update info of dog 1 | Remove dog 1 |
 ## Usage
 ### List all messages
 **Definition:** `GET /greetings`
@@ -280,27 +280,40 @@ Bellow is an example that shows how the API will behave and the vebs that it wil
 ## Requirements (No Docker)
 - Java (+11)
 - Maven (+3)
+- [jdbc-rmi-server](https://github.com/Guergeiro/jdbc-rmi-server)
 
 ## Install (No Docker)
 - Navigate to folder
+- config.config file with the following code inside
+```
+rmi-url=INSERT URL HERE
+rmi-port=INSERT PORT HERE (Exclude the ":");
+```
 - mvn clean install
 - mvn dependency:resolve
 - mvn verify
-- java -jar ./target/rest-api-0.1.0-SNAPSHOT-jar-with-dependencies.jar
+- java -jar ./target/rest-server.jar
 
 *Note: Will listen on port 4567*
 
 ## Requirements (Docker)
 - Docker
+- [jdbc-rmi-server](https://github.com/Guergeiro/jdbc-rmi-server)
 
 ## Install (Docker)
 - Navigate to folder
-- docker build -t rest-api .
-- docker run -p 5000:4567 rest-api
+- config.config file with the following code inside
+```
+rmi-url=INSERT URL HERE
+rmi-port=INSERT PORT HERE
+```
+- docker build -t rest-server .
+- docker run -p 5000:4567 rest-server
 
 *Note: Will listen on port 5000*
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
-MIT © [Breno Salles](brenosalles.com)
+## Author
+[Breno Salles](brenosalles.com)

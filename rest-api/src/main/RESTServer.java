@@ -29,8 +29,6 @@ import spark.Request;
 import spark.Response;
 import user.User;
 
-/* args0 -> config file */
-
 public class RESTServer {
   // Attributes
   private static HashMap<Integer, Message> greetings = new HashMap<>();
