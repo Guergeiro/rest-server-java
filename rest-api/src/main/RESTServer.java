@@ -5,6 +5,10 @@ import static spark.Spark.get;
 import static spark.Spark.notFound;
 import static spark.Spark.post;
 import static spark.Spark.put;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -14,6 +18,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
+import java.util.Properties;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 import org.json.simple.JSONArray;
@@ -31,13 +36,33 @@ public class RESTServer {
   private static HashMap<Integer, Message> greetings = new HashMap<>();
   private static Integer count = 0;
   private static JDBCInterface jdbc;
-  
+
   public static void main(String[] args) {
+    // Imports config
+    Properties prop = new Properties();
+    InputStream is = null;
     try {
-      jdbc = (JDBCInterface) Naming.lookup("rmi://" + "rmi-server:7654" + "/jdbc");
-    } catch (MalformedURLException | RemoteException | NotBoundException e) {
-      System.out.println("Can't find RMIServer.");
+      is = new FileInputStream(args[0]);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
       System.exit(1);
+    }
+    try {
+      prop.load(is);
+    } catch (IOException e) {
+      e.printStackTrace();
+      System.exit(1);
+    }
+
+    while (true) {
+      try {
+        jdbc = (JDBCInterface) Naming.lookup(
+            "rmi://" + prop.getProperty("rmi-url") + ":" + prop.getProperty("rmi-port") + "/rmi-server");
+        break;
+      } catch (MalformedURLException | RemoteException | NotBoundException e) {
+        System.out.println("Can't find RMIServer. Searching again. CTRL+C to stop.");
+        continue;
+      }
     }
 
     get("/users", (req, res) -> {

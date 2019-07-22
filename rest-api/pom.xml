@@ -27,6 +27,7 @@
 					</execution>
 				</executions>
 				<configuration>
+					<finalName>rest-server</finalName>
 					<archive>
 						<manifest>
 							<addClasspath>true</addClasspath>
@@ -36,6 +37,7 @@
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
+					<appendAssemblyId>false</appendAssemblyId>
 				</configuration>
 			</plugin>
 		</plugins>
