@@ -53,31 +53,6 @@ Bellow is an example that shows how the API will behave and the vebs that it wil
     "message": "Error motive."
 }
 ```
-### Create a message
-**Definition:** `POST /greetings`
-
-**Response**:
-- `500 - Internal Server Error`
-- `400 - Bad User Request`
-- `200 - OK`
-
-**Response Body (Success):**:
-```json
-{
-    "10": {
-        "date": "2019-07-17 15:37:48.873",
-        "message": "bJmmCHfVV"
-    }
-}
-```
-
-**Response Body (Error):**
-```json
-{
-    "message": "Error motive."
-}
-```
-
 ### List Specific message
 **Definition:** `GET /greetings/(:id)`
 
@@ -103,7 +78,30 @@ Bellow is an example that shows how the API will behave and the vebs that it wil
     "message": "Error motive."
 }
 ```
+### Create a message
+**Definition:** `POST /greetings`
 
+**Response**:
+- `500 - Internal Server Error`
+- `400 - Bad User Request`
+- `200 - OK`
+
+**Response Body (Success):**:
+```json
+{
+    "10": {
+        "date": "2019-07-17 15:37:48.873",
+        "message": "bJmmCHfVV"
+    }
+}
+```
+
+**Response Body (Error):**
+```json
+{
+    "message": "Error motive."
+}
+```
 ### Update Specific message
 **Definition:** `PUT /greetings/(:id)`
 
@@ -129,7 +127,6 @@ Bellow is an example that shows how the API will behave and the vebs that it wil
     "message": "Error motive."
 }
 ```
-
 ### Delete Specific message
 **Definition:** `DELETE /greetings/(:id)`
 
@@ -142,7 +139,7 @@ Bellow is an example that shows how the API will behave and the vebs that it wil
 **Response Body (Success):**
 ```json
 {
-    "10": "Delete Successful."
+    "message": "Delete Successful."
 }
 ```
 
@@ -152,7 +149,134 @@ Bellow is an example that shows how the API will behave and the vebs that it wil
     "message": "Error motive."
 }
 ```
+### List all users
+**Definition:** `GET /users`
 
+**Response**:
+- `500 - Internal Server Error`
+- `400 - Bad User Request`
+- `200 - OK`
+
+**Response Body (Success):**:
+```json
+[
+	{
+        "localidade": "viseu",
+        "nome": "breno",
+        "id": "11",
+        "datanascimento": "1997-03-04"
+    },
+	{
+        "localidade": "lisboa",
+        "nome": "andré",
+        "id": "12",
+        "datanascimento": "1998-07-03"
+    }
+]
+```
+
+**Response Body (Error):**
+```json
+{
+    "message": "Error motive."
+}
+```
+### List Specific user
+**Definition:** `GET /users/(:id)`
+
+**Response:**
+- `500 - Internal Server Error`
+- `404 - Not Found`
+- `400 - Bad User Request`
+- `200 - OK`
+
+**Response Body (Success):**
+```json
+{
+    "localidade": "viseu",
+    "nome": "breno",
+    "id": "11",
+    "datanascimento": "1997-03-04"
+}
+```
+
+**Response Body (Error):**
+```json
+{
+    "message": "Error motive."
+}
+```
+### Create a user
+**Definition:** `POST /users`
+
+**Response**:
+- `500 - Internal Server Error`
+- `400 - Bad User Request`
+- `200 - OK`
+
+**Response Body (Success):**:
+```json
+{
+    "localidade": "viseu",
+    "nome": "breno",
+    "id": "11",
+    "datanascimento": "1997-03-04"
+}
+```
+
+**Response Body (Error):**
+```json
+{
+    "message": "Error motive."
+}
+```
+### Update Specific user
+**Definition:** `PUT /users/(:id)`
+
+**Response:**
+- `500 - Internal Server Error`
+- `404 - Not Found`
+- `400 - Bad User Request`
+- `200 - OK`
+
+**Response Body (Success):**
+```json
+{
+    "localidade": "viseu",
+    "nome": "breno",
+    "id": "11",
+    "datanascimento": "1997-03-04"
+}
+```
+
+**Response Body (Error):**
+```json
+{
+    "message": "Error motive."
+}
+```
+### Delete Specific user
+**Definition:** `DELETE /users/(:id)`
+
+**Response:**
+- `500 - Internal Server Error`
+- `404 - Not Found`
+- `400 - Bad User Request`
+- `200 - OK`
+
+**Response Body (Success):**
+```json
+{
+    "message": "Delete Successful."
+}
+```
+
+**Response Body (Error):**
+```json
+{
+    "message": "Error motive."
+}
+```
 ## Requirements (No Docker)
 - Java (+11)
 - Maven (+3)
@@ -175,3 +299,8 @@ Bellow is an example that shows how the API will behave and the vebs that it wil
 - docker run -p 5000:4567 rest-api
 
 *Note: Will listen on port 5000*
+
+## License
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+MIT © [Breno Salles](brenosalles.com)

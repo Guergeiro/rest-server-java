@@ -8,4 +8,4 @@ RUN mvn dependency:resolve
 RUN mvn verify
 
 EXPOSE 4567
-CMD ["java", "-jar", "./target/rest-api-0.3.0-SNAPSHOT-jar-with-dependencies.jar"]
+CMD java -jar ./target/rest-api-0.3.0-SNAPSHOT-jar-with-dependencies.jar

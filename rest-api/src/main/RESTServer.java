@@ -5,10 +5,6 @@ import static spark.Spark.get;
 import static spark.Spark.notFound;
 import static spark.Spark.post;
 import static spark.Spark.put;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -19,7 +15,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.regex.Pattern;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -38,16 +33,6 @@ public class RESTServer {
   private static JDBCInterface jdbc;
   
   public static void main(String[] args) {
-    Properties prop = new Properties();
-    InputStream is;
-    try {
-      is = new FileInputStream(args[0]);
-      prop.load(is);
-    } catch (IOException e1) {
-      System.out.println("Can't open properties.");
-      System.exit(1);
-    }
-    
     try {
       jdbc = (JDBCInterface) Naming.lookup("rmi://" + "rmi-server:7654" + "/jdbc");
     } catch (MalformedURLException | RemoteException | NotBoundException e) {
@@ -107,12 +92,15 @@ public class RESTServer {
     res.type("application/json");
     res.status(200);
 
-    // Calls RMI to insert user
-    String returnedValue;
+    // Calls RMI to select all users
     try {
-      returnedValue = jdbc.selectAllUsers();
+      JSONArray array = jdbc.selectAllUsers();
+      if (array == null) {
+        res.status(500);
+        return returnJSONMessage("RMIServer error.");
+      }
       res.status(200);
-      return returnedValue;
+      return array.toJSONString();
     } catch (RemoteException e) {
       res.status(500);
       return returnJSONMessage("RMIServer error.");
@@ -122,15 +110,14 @@ public class RESTServer {
   private static String oneUser(Response res, Integer id) {
     res.type("application/json");
 
-    // Calls RMI to insert user
-    String returnedValue;
+    // Calls RMI to select one user
     try {
-      returnedValue = jdbc.selectUser(id);
-      if (returnedValue == null) {
+      JSONObject obj = jdbc.selectUser(id);
+      if (obj == null) {
         return returnJSONMessage("Key doesn't exist.");
       }
       res.status(200);
-      return returnedValue;
+      return obj.toJSONString();
     } catch (RemoteException e) {
       res.status(500);
       return returnJSONMessage("RMIServer error.");
@@ -165,16 +152,15 @@ public class RESTServer {
 
   private static String deleteUser(Response res, Integer id) {
     res.type("application/json");
-    // Calls RMI to insert user
-    String returnedValue;
+    // Calls RMI to delete user
     try {
-      returnedValue = jdbc.deleteUser(id);
-      if (returnedValue == null) {
+      JSONObject obj = jdbc.deleteUser(id);
+      if (obj == null) {
         res.status(404);
         return returnJSONMessage("Key doesn't exist.");
       }
       res.status(200);
-      return returnedValue;
+      return obj.toJSONString();
     } catch (RemoteException e) {
       res.status(500);
       return returnJSONMessage("RMIServer error.");
@@ -211,15 +197,14 @@ public class RESTServer {
     }
 
     // Calls RMI to update user
-    String returnedValue;
     try {
-      returnedValue = jdbc.updateUser(id, new User(nome, birthday, localidade));
-      if (returnedValue == null) {
+      obj = jdbc.updateUser(id, new User(nome, birthday, localidade));
+      if (obj == null) {
         res.status(404);
         return returnJSONMessage("Key doesn't exist.");
       }
       res.status(200);
-      return returnedValue;
+      return obj.toJSONString();
     } catch (RemoteException e) {
       res.status(500);
       return returnJSONMessage("RMIServer error.");
