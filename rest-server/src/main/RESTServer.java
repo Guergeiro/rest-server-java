@@ -59,6 +59,11 @@ public class RESTServer {
         break;
       } catch (MalformedURLException | RemoteException | NotBoundException e) {
         System.out.println("Can't find RMIServer. Searching again. CTRL+C to stop.");
+        try {
+          Thread.sleep(5000);
+        } catch (InterruptedException e1) {
+          e1.printStackTrace();
+        }
         continue;
       }
     }

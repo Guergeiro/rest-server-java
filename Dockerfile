@@ -1,7 +1,7 @@
 FROM maven:3.6.1-jdk-11
 
 COPY . /usr/src/
-WORKDIR /usr/src/rest-api
+WORKDIR /usr/src/rest-server
 
 RUN mvn clean install
 RUN mvn dependency:resolve
