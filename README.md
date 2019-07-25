@@ -162,15 +162,11 @@ Bellow is an example that shows how the API will behave and the vebs that it wil
 [
 	{
         "localidade": "viseu",
-        "nome": "breno",
-        "id": "11",
-        "datanascimento": "1997-03-04"
+        "nome": "breno"
     },
 	{
         "localidade": "lisboa",
-        "nome": "andré",
-        "id": "12",
-        "datanascimento": "1998-07-03"
+        "nome": "andré"         
     }
 ]
 ```
