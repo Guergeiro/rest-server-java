@@ -81,23 +81,23 @@ public class RESTServer {
     });
 
     put("/users/:id", (req, res) -> {
-      return updateUser(req, res, Integer.valueOf(req.params(":id")));
+      return updateUser(req, res);
     });
 
     get("/greetings", (req, res) -> {
-      return allGreetings(res);
+      return allGreetings(req, res);
     });
 
     get("/greetings/:id", (req, res) -> {
-      return oneGreeting(res, Integer.valueOf(req.params(":id")));
+      return oneGreeting(req, res);
     });
 
     put("/greetings/:id", (req, res) -> {
-      return updateGreeting(req, res, Integer.valueOf(req.params(":id")));
+      return updateGreeting(req, res);
     });
 
     delete("/greetings/:id", (req, res) -> {
-      return deleteGreeting(res, Integer.valueOf(req.params(":id")));
+      return deleteGreeting(req, res);
     });
 
     post("/greetings", (req, res) -> {
@@ -154,7 +154,7 @@ public class RESTServer {
   private static String deleteUser(Request req, Response res) {
     res.type("application/json");
     Integer id = Integer.valueOf(req.params(":id"));
-    // Calls RMI to select all users
+    // Calls RMI to delete user
     try {
       ResponseObject response = jdbc.deleteUser(id);
       res.status(response.getStatus());
@@ -166,38 +166,31 @@ public class RESTServer {
     }
   }
 
-  @SuppressWarnings("unchecked")
-  private static String updateUser(Request req, Response res, Integer id) {
+  private static String updateUser(Request req, Response res) {
     res.type("application/json");
-
+    Integer id = Integer.valueOf(req.params(":id"));
     // Checks date
     LocalDate birthday = processDate(req.queryParams("datanascimento"));
     if (birthday == null) {
-      JSONObject obj = new JSONObject();
       res.status(400);
-      obj.put("message", "Wrong datanascimento format.");
-      return obj.toJSONString();
+      return returnJSONMessage("Wrong datanascimento format.");
     }
 
     // Checks name
     String nome = req.queryParams("nome");
     if (nome == null) {
-      JSONObject obj = new JSONObject();
       res.status(400);
-      obj.put("message", "Missing nome.");
-      return obj.toJSONString();
+      return returnJSONMessage("Missing nome.");
     }
 
     // Checks localidade
     String localidade = req.queryParams("localidade");
     if (localidade == null) {
-      JSONObject obj = new JSONObject();
       res.status(400);
-      obj.put("message", "Missing localidade.");
-      return obj.toJSONString();
+      return returnJSONMessage("Missing localidade.");
     }
 
-    // Calls RMI to select all users
+    // Calls RMI to update user
     try {
       ResponseObject response = jdbc.updateUser(id, new User(nome, birthday, localidade));
       res.status(response.getStatus());
@@ -209,27 +202,23 @@ public class RESTServer {
     }
   }
 
-  @SuppressWarnings("unchecked")
   private static String pageNotFound(Response res) {
     res.type("application/json");
     res.status(404);
-    JSONObject obj = new JSONObject();
-    obj.put("message", "API endpoint not avaiable.");
-    return obj.toJSONString();
+    return returnJSONMessage("API endpoint not avaiable.");
   }
 
-  private static String allGreetings(Response res) {
+  private static String allGreetings(Request req, Response res) {
     res.type("application/json");
 
     // Calls RMI to select all messages
     try {
-      JSONArray array = jdbc.selectAllMessages();
-      if (array == null) {
-        res.status(500);
-        return returnJSONMessage("RMIServer error.");
+      ResponseObject response = jdbc.selectAllMessages();
+      res.status(response.getStatus());
+      if (response.getStatus() != 200) {
+        return response.getObject().toJSONString();
       }
-      res.status(200);
-      return array.toJSONString();
+      return response.getArray().toJSONString();
     } catch (RemoteException e) {
       e.printStackTrace();
       res.status(500);
@@ -237,17 +226,14 @@ public class RESTServer {
     }
   }
 
-  private static String oneGreeting(Response res, Integer id) {
+  private static String oneGreeting(Request req, Response res) {
     res.type("application/json");
-
+    Integer id = Integer.valueOf(req.params(":id"));
     // Calls RMI to select one message
     try {
-      JSONObject obj = jdbc.selectMessage(id);
-      if (obj == null) {
-        return returnJSONMessage("Key doesn't exist.");
-      }
-      res.status(200);
-      return obj.toJSONString();
+      ResponseObject response = jdbc.selectMessage(id);
+      res.status(response.getStatus());
+      return response.getObject().toJSONString();
     } catch (RemoteException e) {
       e.printStackTrace();
       res.status(500);
@@ -255,26 +241,20 @@ public class RESTServer {
     }
   }
 
-  private static String updateGreeting(Request req, Response res, Integer id) {
+  private static String updateGreeting(Request req, Response res) {
     res.type("application/json");
-    JSONObject obj = new JSONObject();
-
-    // Checks localidade
+    Integer id = Integer.valueOf(req.params(":id"));
+    // Checks message
     String message = req.queryParams("message");
     if (message == null || !Pattern.matches("[a-zA-Z]+", message)) {
       res.status(400);
       return returnJSONMessage("Wrong message. Should match [a-zA-Z]+ pattern.");
     }
-
-    // Calls RMI to update message
+    // Calls RMI to update one greeting
     try {
-      obj = jdbc.updateMessage(id, new Message(message));
-      if (obj == null) {
-        res.status(404);
-        return returnJSONMessage("Key doesn't exist.");
-      }
-      res.status(200);
-      return obj.toJSONString();
+      ResponseObject response = jdbc.updateMessage(id, new Message(message));
+      res.status(response.getStatus());
+      return response.getObject().toJSONString();
     } catch (RemoteException e) {
       e.printStackTrace();
       res.status(500);
@@ -285,7 +265,7 @@ public class RESTServer {
   private static String createGreeting(Request req, Response res) {
     res.type("application/json");
     String message = req.queryParams("message");
-    // Checks localidade
+    // Checks message
     if (message == null || !Pattern.matches("[a-zA-Z]+", message)) {
       res.status(400);
       return returnJSONMessage("Wrong message. Should match [a-zA-Z]+ pattern.");
@@ -293,8 +273,9 @@ public class RESTServer {
 
     // Calls RMI to insert Greeting
     try {
-      res.status(200);
-      return jdbc.insertMessage(new Message(message)).toJSONString();
+      ResponseObject response = jdbc.insertMessage(new Message(message));
+      res.status(response.getStatus());
+      return response.getObject().toJSONString();
     } catch (RemoteException e) {
       e.printStackTrace();
       res.status(500);
@@ -302,17 +283,14 @@ public class RESTServer {
     }
   }
 
-  private static String deleteGreeting(Response res, Integer id) {
+  private static String deleteGreeting(Request req, Response res) {
     res.type("application/json");
-    // Calls RMI to delete user
+    Integer id = Integer.valueOf(req.params(":id"));
+    // Calls RMI to delete message
     try {
-      JSONObject obj = jdbc.deleteMessage(id);
-      if (obj == null) {
-        res.status(404);
-        return returnJSONMessage("Key doesn't exist.");
-      }
-      res.status(200);
-      return obj.toJSONString();
+      ResponseObject response = jdbc.deleteMessage(id);
+      res.status(response.getStatus());
+      return response.getObject().toJSONString();
     } catch (RemoteException e) {
       e.printStackTrace();
       res.status(500);
