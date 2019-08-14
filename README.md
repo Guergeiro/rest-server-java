@@ -27,22 +27,19 @@ Bellow is an example that shows how the API will behave and the vebs that it wil
 ```json
 [
 	{
-        "10": {
-            "date": "2019-07-17 15:37:48.873",
-            "message": "bJmmCHfVV"
-        }
+        "date": "2019-07-17 15:37:48.873",
+        "message": "bJmmCHfVV",
+        "id": 10
     },
 	{
-        "28": {
-            "date": "2019-07-17 15:47:26.316",
-            "message": "LfqAnimt"
-        }
+        "date": "2019-07-17 15:37:48.873",
+        "message": "bJmmCHfVV",
+        "id": 12
     },
     {
-        "44": {
-            "date": "2019-07-17 15:47:47.067",
-            "message": "yPIVIDVc"
-        }
+        "date": "2019-07-17 15:37:48.873",
+        "message": "bJmmCHfVV",
+        "id": 13
     }
 ]
 ```
@@ -65,10 +62,9 @@ Bellow is an example that shows how the API will behave and the vebs that it wil
 **Response Body (Success):**
 ```json
 {
-    "10": {
-        "date": "2019-07-17 15:37:48.873",
-        "message": "bJmmCHfVV"
-    }
+    "date": "2019-07-17 15:37:48.873",
+    "message": "bJmmCHfVV",
+    "id": 10
 }
 ```
 
@@ -89,10 +85,9 @@ Bellow is an example that shows how the API will behave and the vebs that it wil
 **Response Body (Success):**:
 ```json
 {
-    "10": {
-        "date": "2019-07-17 15:37:48.873",
-        "message": "bJmmCHfVV"
-    }
+    "date": "2019-07-17 15:37:48.873",
+    "message": "bJmmCHfVV",
+    "id": 10
 }
 ```
 
@@ -114,10 +109,9 @@ Bellow is an example that shows how the API will behave and the vebs that it wil
 **Response Body (Success):**
 ```json
 {
-    "10": {
-        "date": "2019-07-17 15:37:48.873",
-        "message": "bJmmCHfVV"
-    }
+    "date": "2019-07-17 15:37:48.873",
+    "message": "bJmmCHfVV",
+    "id": 10
 }
 ```
 
@@ -162,11 +156,15 @@ Bellow is an example that shows how the API will behave and the vebs that it wil
 [
 	{
         "localidade": "viseu",
-        "nome": "breno"
+        "nome": "breno",
+        "id": 19,
+        "datanascimento": "2018-01-01"
     },
 	{
         "localidade": "lisboa",
-        "nome": "andré"         
+        "nome": "andré",
+        "id": 20,
+        "datanascimento": "2017-01-01"
     }
 ]
 ```
@@ -191,7 +189,7 @@ Bellow is an example that shows how the API will behave and the vebs that it wil
 {
     "localidade": "viseu",
     "nome": "breno",
-    "id": "11",
+    "id": 11,
     "datanascimento": "1997-03-04"
 }
 ```
@@ -215,7 +213,7 @@ Bellow is an example that shows how the API will behave and the vebs that it wil
 {
     "localidade": "viseu",
     "nome": "breno",
-    "id": "11",
+    "id": 11,
     "datanascimento": "1997-03-04"
 }
 ```
@@ -240,7 +238,7 @@ Bellow is an example that shows how the API will behave and the vebs that it wil
 {
     "localidade": "viseu",
     "nome": "breno",
-    "id": "11",
+    "id": 11,
     "datanascimento": "1997-03-04"
 }
 ```

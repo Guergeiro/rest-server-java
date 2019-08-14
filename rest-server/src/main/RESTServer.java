@@ -47,22 +47,16 @@ public class RESTServer {
       e.printStackTrace();
       System.exit(1);
     }
-
     while (true) {
       try {
         jdbc = (JDBCInterface) Naming.lookup("rmi://" + prop.getProperty("rmi-url") + ":"
             + prop.getProperty("rmi-port") + "/rmi-server");
         break;
       } catch (MalformedURLException | RemoteException | NotBoundException e) {
-        System.out.println("Can't find RMIServer. Searching again. CTRL+C to stop.");
-        try {
-          Thread.sleep(5000);
-        } catch (InterruptedException e1) {
-          e1.printStackTrace();
-        }
-        continue;
+        System.out.println("Can't find RMIServer.");
       }
     }
+    
 
     get("/users", (req, res) -> {
       return allUsers(req, res);
